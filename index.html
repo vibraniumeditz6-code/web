@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
+  <meta name="description" content="PAUSE is a local-first digital safety workspace for clearer, more deliberate browsing and everyday security checks.">
+  <meta property="og:title" content="PAUSE — Digital Safety, with Clarity">
+  <meta property="og:description" content="Explore the PAUSE digital safety workspace, its protection layers and its current development status.">
+  <meta property="og:type" content="website">
+  <title>PAUSE — Digital Safety, with Clarity</title>
+  <link rel="icon" type="image/png" href="assets/pause-mark.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f7f5ef;
+      --paper-2: #f1eee6;
+      --white: #fffefa;
+      --ink: #202533;
+      --muted: #737987;
+      --line: rgba(39, 49, 66, .10);
+      --line-strong: rgba(39, 49, 66, .16);
+      --mint: #3fd5c4;
+      --mint-dark: #159f96;
+      --violet: #9181f7;
+      --peach: #e8b995;
+      --shadow: 0 22px 70px rgba(45, 54, 72, .09);
+      --shadow-soft: 0 10px 32px rgba(45, 54, 72, .07);
+      --radius: 26px;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+    body {
+      margin: 0; color: var(--ink); background:
+        radial-gradient(ellipse at 82% 8%, rgba(164, 150, 255, .16), transparent 26rem),
+        radial-gradient(ellipse at 4% 30%, rgba(80, 221, 204, .10), transparent 24rem),
+        var(--paper);
+      font-family: 'DM Sans', sans-serif; line-height: 1.6; overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .shell { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; }
+    .top-glow { position: absolute; z-index: -1; width: 500px; height: 500px; border-radius: 50%; filter: blur(75px); opacity: .18; pointer-events: none; }
+    .glow-a { top: 190px; right: -280px; background: #8d7bff; }
+    .glow-b { top: 520px; left: -330px; background: #47dfcd; }
+
+    .nav-wrap { position: sticky; z-index: 20; top: 0; padding: 14px 0; background: rgba(247, 245, 239, .78); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(39,49,66,.06); }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; min-width: 180px; }
+    .brand img { width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 5px 12px rgba(103, 123, 219, .18)); }
+    .brand-name { font: 800 18px/1 'Manrope', sans-serif; letter-spacing: .13em; }
+    .brand-sub { display: block; margin-top: 5px; color: #8a8e99; font-size: 8px; font-weight: 700; letter-spacing: .22em; }
+    .nav-links { display: flex; align-items: center; gap: 31px; color: #656c7a; font-size: 13px; font-weight: 600; }
+    .nav-links a { transition: color .2s ease; }
+    .nav-links a:hover { color: var(--mint-dark); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .menu-toggle { display: none; width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); color: var(--ink); cursor: pointer; }
+
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 46px; padding: 0 19px; border: 1px solid transparent; border-radius: 14px; font-size: 13px; font-weight: 700; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; cursor: pointer; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { color: #132b31; background: linear-gradient(110deg, #55e0ce, #a6eee4 58%, #c3b8ff); box-shadow: 0 9px 24px rgba(76, 206, 193, .23), inset 0 1px rgba(255,255,255,.8); }
+    .button-primary:hover { box-shadow: 0 13px 32px rgba(76, 206, 193, .30); }
+    .button-quiet { border-color: var(--line-strong); background: rgba(255,254,250,.72); color: #343c4b; }
+    .button-quiet:hover { border-color: rgba(63,213,196,.55); box-shadow: 0 8px 24px rgba(48, 61, 77, .07); }
+    .arrow { font-size: 17px; line-height: 0; }
+
+    .hero { position: relative; display: grid; grid-template-columns: 1fr 1.02fr; align-items: center; gap: 54px; padding: 91px 0 83px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: #637282; font-size: 10px; font-weight: 800; letter-spacing: .19em; text-transform: uppercase; }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--mint-dark); box-shadow: 0 0 0 5px rgba(63,213,196,.14), 0 0 15px rgba(63,213,196,.65); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 620px; margin: 21px 0 22px; font: 800 clamp(46px, 5.6vw, 72px)/1.05 'Manrope', sans-serif; letter-spacing: -.065em; }
+    .gradient-text { color: transparent; background: linear-gradient(100deg, #2bb8ad 4%, #63cfc2 40%, #8b80ef 95%); -webkit-background-clip: text; background-clip: text; }
+    .hero-copy { max-width: 500px; color: var(--muted); font-size: 16px; line-height: 1.85; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 29px; }
+    .micro-trust { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 29px; color: #858b96; font-size: 11px; font-weight: 600; }
+    .micro-trust span { display: inline-flex; align-items: center; gap: 7px; }
+    .micro-trust i { width: 5px; height: 5px; border-radius: 50%; background: #55cabb; box-shadow: 0 0 8px rgba(63,213,196,.7); }
+
+    .preview-wrap { position: relative; min-width: 0; perspective: 1000px; }
+    .preview-aura { position: absolute; inset: 8% 3% 3%; z-index: -1; background: linear-gradient(125deg, rgba(63,213,196,.32), rgba(145,129,247,.27), rgba(232,185,149,.23)); filter: blur(48px); border-radius: 50%; }
+    .preview { position: relative; padding: 15px; border: 1px solid rgba(255,255,255,.9); border-radius: 27px; background: linear-gradient(145deg, rgba(255,255,255,.93), rgba(255,254,250,.75)); box-shadow: 0 30px 85px rgba(47,57,79,.15), inset 0 1px rgba(255,255,255,.95); transform: rotateY(-5deg) rotateX(2deg); }
+    .preview-top { display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 15px; border-bottom: 1px solid var(--line); }
+    .preview-brand { display: flex; align-items: center; gap: 8px; font: 800 11px 'Manrope', sans-serif; letter-spacing: .14em; }
+    .preview-brand img { width: 24px; height: 24px; }
+    .window-dots { display: flex; gap: 5px; }
+    .window-dots b { display: block; width: 6px; height: 6px; border-radius: 50%; background: #d7d7d5; }
+    .preview-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border: 1px solid rgba(43,184,173,.18); border-radius: 99px; color: #20998e; background: rgba(63,213,196,.08); font-size: 8px; font-weight: 800; letter-spacing: .08em; }
+    .preview-body { display: grid; grid-template-columns: 100px 1fr; min-height: 330px; padding-top: 13px; }
+    .preview-side { padding: 10px 8px; border-right: 1px solid var(--line); }
+    .side-kicker { margin: 2px 0 12px; color: #a0a5ad; font-size: 7px; font-weight: 800; letter-spacing: .16em; }
+    .side-item { display: flex; align-items: center; gap: 7px; margin: 5px 0; padding: 8px 7px; border-radius: 8px; color: #7d8490; font-size: 8px; font-weight: 700; }
+    .side-item.active { color: #159e95; background: linear-gradient(90deg, rgba(63,213,196,.14), rgba(145,129,247,.09)); box-shadow: inset 2px 0 #48cdbf; }
+    .side-icon { display: grid; place-items: center; width: 13px; height: 13px; border: 1px solid currentColor; border-radius: 4px; font-size: 7px; }
+    .preview-main { padding: 13px 14px 12px; }
+    .preview-overline { color: #2cb9ad; font-size: 7px; font-weight: 800; letter-spacing: .2em; }
+    .preview-heading { margin: 7px 0 4px; font: 800 19px 'Manrope', sans-serif; letter-spacing: -.05em; }
+    .preview-sub { color: #9096a0; font-size: 8px; }
+    .mock-hero { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 112px; margin-top: 15px; padding: 17px; overflow: hidden; border: 1px solid rgba(76,202,194,.23); border-radius: 15px; background: linear-gradient(105deg, rgba(225,250,245,.9), rgba(242,239,255,.78)); }
+    .mock-hero::after { position: absolute; right: 8px; top: -41px; width: 160px; height: 160px; border: 1px dashed rgba(128,133,221,.24); border-radius: 50%; content: ''; box-shadow: 0 0 0 15px rgba(255,255,255,.14), 0 0 0 31px rgba(255,255,255,.12); }
+    .mock-hero-text { position: relative; z-index: 1; max-width: 165px; }
+    .mock-label { color: #73828e; font-size: 7px; font-weight: 800; letter-spacing: .13em; }
+    .mock-title { margin: 6px 0; font: 800 17px/1.13 'Manrope',sans-serif; letter-spacing: -.05em; }
+    .mock-description { color: #7d8791; font-size: 7px; }
+    .mock-shield { position: relative; z-index: 1; display: grid; place-items: center; width: 57px; height: 57px; border: 1px solid rgba(88,197,190,.3); border-radius: 19px; color: #40bfae; background: rgba(255,255,255,.65); box-shadow: 0 0 28px rgba(63,213,196,.18); font-size: 26px; }
+    .mock-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 9px; }
+    .mock-stat { padding: 11px 10px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.74); }
+    .mock-stat small { display: block; color: #9298a2; font-size: 7px; }
+    .mock-stat strong { display: block; margin-top: 4px; font: 800 15px 'Manrope',sans-serif; }
+    .mock-stat em { color: #39b7a8; font-size: 7px; font-style: normal; }
+    .mock-bottom { display: grid; grid-template-columns: 1.1fr .9fr; gap: 8px; margin-top: 9px; }
+    .mock-panel { padding: 11px; min-height: 73px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.74); }
+    .mock-panel-title { color: #687487; font-size: 8px; font-weight: 800; }
+    .mock-bars { display: flex; align-items: end; gap: 5px; height: 34px; padding-top: 5px; }
+    .mock-bars i { display: block; flex: 1; height: var(--h); border-radius: 4px 4px 2px 2px; background: linear-gradient(180deg, #70dfd0, #b5b0f6); opacity: .8; }
+    .mock-event { display: flex; align-items: center; gap: 7px; padding-top: 9px; color: #7e8793; font-size: 7px; }
+    .mock-event b { width: 7px; height: 7px; border-radius: 50%; background: #e8bb79; box-shadow: 0 0 8px rgba(232,187,121,.5); }
+    .preview-caption { margin: 10px 5px 1px; color: #989da6; font-size: 8px; text-align: center; }
+
+    .section { padding: 81px 0; }
+    .section-head { max-width: 640px; margin: 0 auto 36px; text-align: center; }
+    .section-head h2 { margin: 14px 0 12px; font: 800 clamp(30px, 4vw, 44px)/1.12 'Manrope', sans-serif; letter-spacing: -.055em; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .feature-card { position: relative; min-height: 218px; padding: 25px; overflow: hidden; border: 1px solid rgba(255,255,255,.9); border-radius: 21px; background: linear-gradient(150deg, rgba(255,255,255,.92), rgba(255,254,250,.78)); box-shadow: var(--shadow-soft), inset 0 1px rgba(255,255,255,.9); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .feature-card:hover { transform: translateY(-5px); border-color: rgba(63,213,196,.45); box-shadow: 0 20px 45px rgba(45,54,72,.10), 0 0 28px rgba(63,213,196,.08); }
+    .feature-icon { display: grid; place-items: center; width: 43px; height: 43px; margin-bottom: 18px; border: 1px solid rgba(70,200,188,.2); border-radius: 14px; color: #159f96; background: linear-gradient(145deg, rgba(63,213,196,.13), rgba(145,129,247,.10)); box-shadow: 0 7px 20px rgba(63,213,196,.08); font-size: 19px; }
+    .feature-card h3 { margin: 0 0 8px; font: 800 16px 'Manrope',sans-serif; letter-spacing: -.025em; }
+    .feature-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .feature-index { position: absolute; top: 21px; right: 22px; color: rgba(108,119,134,.28); font: 800 11px 'Manrope',sans-serif; letter-spacing: .12em; }
+
+    .band { padding: 28px 0 82px; }
+    .band-card { position: relative; display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: 42px; padding: 42px; overflow: hidden; border: 1px solid rgba(255,255,255,.92); border-radius: 28px; background: linear-gradient(115deg, rgba(255,255,255,.92), rgba(242,240,250,.82)); box-shadow: var(--shadow); }
+    .band-card::before { position: absolute; right: -110px; top: -190px; width: 400px; height: 400px; border: 1px solid rgba(145,129,247,.15); border-radius: 50%; content: ''; box-shadow: 0 0 0 24px rgba(145,129,247,.035), 0 0 0 52px rgba(63,213,196,.035), 0 0 0 85px rgba(145,129,247,.025); }
+    .band-copy, .steps { position: relative; z-index: 1; }
+    .band-copy h2 { margin: 13px 0; font: 800 34px/1.14 'Manrope',sans-serif; letter-spacing: -.055em; }
+    .band-copy p { max-width: 420px; margin-bottom: 0; color: var(--muted); font-size: 13px; line-height: 1.85; }
+    .steps { display: grid; gap: 11px; }
+    .step { display: grid; grid-template-columns: 36px 1fr; align-items: start; gap: 12px; padding: 15px; border: 1px solid rgba(39,49,66,.08); border-radius: 15px; background: rgba(255,255,255,.72); }
+    .step-num { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 10px; color: #1c938c; background: linear-gradient(135deg, rgba(63,213,196,.18), rgba(145,129,247,.15)); font: 800 11px 'Manrope',sans-serif; }
+    .step h3 { margin: 1px 0 3px; font: 800 12px 'Manrope',sans-serif; }
+    .step p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
+
+    .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .principle { padding: 23px; border-top: 1px solid var(--line-strong); }
+    .principle span { color: #31b9ae; font: 800 10px 'Manrope',sans-serif; letter-spacing: .16em; }
+    .principle h3 { margin: 10px 0 7px; font: 800 16px 'Manrope',sans-serif; }
+    .principle p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .caution { margin: 30px 0 0; padding: 15px 18px; border: 1px solid rgba(217,174,113,.27); border-radius: 14px; color: #7f715f; background: rgba(255,248,235,.72); font-size: 11px; line-height: 1.8; }
+
+    .closing { padding: 25px 0 89px; }
+    .closing-card { position: relative; padding: 55px 30px; overflow: hidden; border: 1px solid rgba(255,255,255,.88); border-radius: 27px; background: linear-gradient(115deg, rgba(222,249,242,.85), rgba(248,246,255,.93) 57%, rgba(255,244,232,.8)); box-shadow: var(--shadow); text-align: center; }
+    .closing-card::after { position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,.8), transparent 55%); content: ''; pointer-events: none; }
+    .closing-card > * { position: relative; z-index: 1; }
+    .closing-card h2 { max-width: 660px; margin: 12px auto; font: 800 clamp(30px, 4vw, 45px)/1.12 'Manrope',sans-serif; letter-spacing: -.055em; }
+    .closing-card p { max-width: 490px; margin: 0 auto 22px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+
+    footer { padding: 24px 0 31px; border-top: 1px solid var(--line); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .footer-note { color: #9096a0; font-size: 10px; }
+    .footer-links { display: flex; gap: 20px; color: #737987; font-size: 11px; font-weight: 600; }
+    .footer-links a:hover { color: var(--mint-dark); }
+    .reveal { opacity: 0; transform: translateY(17px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .float { animation: float 7s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0) rotateY(-5deg) rotateX(2deg); } 50% { transform: translateY(-9px) rotateY(-3deg) rotateX(1deg); } }
+
+
+    .nav-download { min-height: 42px; padding-inline: 15px; }
+    .app-shot { position: relative; margin: 0; padding: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,.94); border-radius: 23px; background: rgba(255,255,255,.88); box-shadow: 0 28px 75px rgba(47,57,79,.15), 0 0 38px rgba(63,213,196,.10); }
+    .app-shot-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 29px; padding: 0 7px 9px; color: #7b8492; font-size: 8px; letter-spacing: .13em; }
+    .app-shot-bar > span:first-child { display: flex; gap: 5px; }
+    .app-shot-bar i { width: 6px; height: 6px; border-radius: 50%; background: #d6d9dc; }
+    .app-shot-bar strong { font: 800 8px 'Manrope',sans-serif; letter-spacing: .16em; }
+    .shot-label { color: #249e95; font-weight: 800; }
+    .app-shot img { display: block; width: 100%; height: auto; border: 1px solid rgba(39,49,66,.08); border-radius: 13px; }
+    .download-section { padding-top: 26px; }
+    .download-card { display: grid; grid-template-columns: 1fr .95fr; gap: 40px; align-items: center; padding: 42px; border: 1px solid rgba(255,255,255,.92); border-radius: 28px; background: linear-gradient(118deg, rgba(255,255,255,.95), rgba(240,248,246,.88) 60%, rgba(246,243,255,.9)); box-shadow: var(--shadow); }
+    .download-copy h2 { margin: 13px 0 12px; font: 800 clamp(30px, 4vw, 42px)/1.12 'Manrope',sans-serif; letter-spacing: -.055em; }
+    .download-copy > p:not(.repo-status) { max-width: 510px; color: var(--muted); font-size: 13px; line-height: 1.85; }
+    .download-cta { margin-top: 7px; }
+    .repo-status { min-height: 18px; margin: 10px 0 0; color: #858b96; font-size: 10px; }
+    .download-steps { display: grid; gap: 10px; }
+    .download-step { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 16px; border: 1px solid rgba(39,49,66,.08); border-radius: 15px; background: rgba(255,255,255,.76); }
+    .download-step > span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; color: #168f88; background: rgba(63,213,196,.13); font: 800 10px 'Manrope',sans-serif; }
+    .download-step strong { display: block; margin: 1px 0 4px; font: 800 12px 'Manrope',sans-serif; }
+    .download-step p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
+    .download-cta.is-unconfigured, .nav-download.is-unconfigured { opacity: .78; }
+    .download-cta.is-unconfigured:hover, .nav-download.is-unconfigured:hover { transform: none; }
+    @media (max-width: 900px) { .download-card { grid-template-columns: 1fr; gap: 25px; } }
+    @media (max-width: 650px) { .nav-download { display: none !important; } .app-shot { padding: 7px; border-radius: 17px; } .app-shot-bar { min-height: 24px; } .download-card { padding: 26px 20px; } }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 43px; padding-top: 66px; }
+      .hero-copy { max-width: 620px; }
+      .preview-wrap { width: min(650px, 100%); margin: 0 auto; }
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+      .band-card { grid-template-columns: 1fr; gap: 25px; }
+    }
+    @media (max-width: 650px) {
+      .shell { width: min(100% - 32px, var(--max)); }
+      .nav-wrap { padding: 10px 0; }
+      .brand { min-width: 0; }
+      .brand img { width: 35px; height: 35px; }
+      .nav-actions .button { display: none; }
+      .menu-toggle { display: grid; place-items: center; }
+      .nav-links { position: absolute; top: 62px; left: 16px; right: 16px; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 9px; border: 1px solid var(--line); border-radius: 17px; background: rgba(255,254,250,.97); box-shadow: var(--shadow); }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px; border-radius: 10px; }
+      .nav-links a:hover { background: rgba(63,213,196,.08); }
+      .hero { padding: 54px 0 60px; }
+      h1 { font-size: clamp(43px, 12vw, 60px); }
+      .hero-copy { font-size: 14px; }
+      .micro-trust { gap: 10px 15px; }
+      .preview { padding: 9px; border-radius: 20px; transform: none; }
+      .preview-body { grid-template-columns: 75px 1fr; min-height: 300px; }
+      .preview-main { padding: 10px 8px; }
+      .preview-side { padding: 8px 4px; }
+      .side-item { gap: 4px; padding: 7px 4px; font-size: 7px; }
+      .mock-hero { min-height: 105px; padding: 12px; }
+      .mock-title { font-size: 14px; }
+      .mock-shield { width: 43px; height: 43px; border-radius: 14px; font-size: 20px; }
+      .mock-stat { padding: 8px 7px; }
+      .mock-stat strong { font-size: 13px; }
+      .section { padding: 61px 0; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .feature-card { min-height: 0; }
+      .band { padding: 5px 0 60px; }
+      .band-card { padding: 26px 20px; }
+      .band-copy h2 { font-size: 30px; }
+      .principles { grid-template-columns: 1fr; gap: 5px; }
+      .principle { padding: 18px 4px; }
+      .closing { padding-bottom: 62px; }
+      .closing-card { padding: 42px 20px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-glow glow-a"></div><div class="top-glow glow-b"></div>
+  <header class="nav-wrap">
+    <div class="shell nav">
+      <a class="brand" href="#home" aria-label="PAUSE home">
+        <img src="assets/pause-mark.png" alt="">
+        <span><span class="brand-name">PAUSE</span><span class="brand-sub">DIGITAL SAFETY WORKSPACE</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#features">Features</a><a href="#approach">Our approach</a><a href="#how-it-works">How it works</a><a href="#download">Download</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="button button-quiet" href="#features">Explore PAUSE</a><a class="button button-primary nav-download" data-repo-link href="#download">Download PAUSE <span class="arrow">↗</span></a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="shell hero">
+      <div class="hero-content reveal">
+        <div class="eyebrow"><i class="eyebrow-dot"></i> A calmer kind of digital protection</div>
+        <h1>Move through your digital world with <span class="gradient-text">more clarity.</span></h1>
+        <p class="hero-copy">PAUSE brings supported browser checks, file and message inspection, activity insights and AI assistance into one considered workspace — with clear boundaries and your local device at the centre.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#features">Discover the workspace <span class="arrow">↗</span></a>
+          <a class="button button-quiet" href="#how-it-works">How PAUSE works</a>
+        </div>
+        <div class="micro-trust"><span><i></i> Local-first by design</span><span><i></i> Clear, explainable checks</span><span><i></i> You stay in control</span></div>
+      </div>
+
+      <div class="preview-wrap reveal" aria-label="Screenshot of the PAUSE desktop workspace">
+        <div class="preview-aura"></div>
+        <figure class="app-shot">
+          <div class="app-shot-bar"><span><i></i><i></i><i></i></span><strong>PAUSE / OVERVIEW</strong><span class="shot-label">DESKTOP PREVIEW</span></div>
+          <img src="assets/pause-overview.png" alt="PAUSE desktop dashboard showing its overview, protection layers, activity summary and local controls" loading="eager">
+        </figure>
+        <div class="preview-caption">A look inside the PAUSE desktop workspace</div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="shell">
+        <div class="section-head reveal">
+          <div class="eyebrow"><i class="eyebrow-dot"></i> One thoughtful workspace</div>
+          <h2>Useful tools. <span class="gradient-text">Less noise.</span></h2>
+          <p>Bring everyday digital checks together without pretending one tool can see or secure everything.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card reveal"><span class="feature-index">01</span><div class="feature-icon">⌁</div><h3>Browser Shield</h3><p>Supported Chrome and Edge checks through the paired local browser extension and desktop bridge.</p></article>
+          <article class="feature-card reveal"><span class="feature-index">02</span><div class="feature-icon">▧</div><h3>File Shield</h3><p>Review selected files using local metadata and signature indicators. It does not replace antivirus protection.</p></article>
+          <article class="feature-card reveal"><span class="feature-index">03</span><div class="feature-icon">✧</div><h3>Message Shield</h3><p>Inspect text you choose to submit and review the indicators returned by the configured checks.</p></article>
+          <article class="feature-card reveal"><span class="feature-index">04</span><div class="feature-icon">◌</div><h3>Network Map</h3><p>Explore supported connection information and network context from the local workspace.</p></article>
+          <article class="feature-card reveal"><span class="feature-index">05</span><div class="feature-icon">✳</div><h3>Threat Intelligence</h3><p>Review threat signals and protection settings available through the sources configured in your workspace.</p></article>
+          <article class="feature-card reveal"><span class="feature-index">06</span><div class="feature-icon">⌘</div><h3>Activity &amp; PAUSE AI</h3><p>Review recorded checks and use optional AI assistance when its provider settings are configured.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="how-it-works">
+      <div class="shell">
+        <div class="band-card reveal">
+          <div class="band-copy">
+            <div class="eyebrow"><i class="eyebrow-dot"></i> Made to be understandable</div>
+            <h2>Know what was checked. Know what wasn't.</h2>
+            <p>PAUSE is designed to show its work, make uncertainty visible and leave meaningful decisions with you. It is a companion to your existing safety tools — not a replacement for them.</p>
+          </div>
+          <div class="steps">
+            <div class="step"><span class="step-num">01</span><div><h3>Connect the supported surface</h3><p>Pair the browser extension with the PAUSE desktop service where required.</p></div></div>
+            <div class="step"><span class="step-num">02</span><div><h3>Choose what to inspect</h3><p>Review supported browser activity or deliberately select a file or message for analysis.</p></div></div>
+            <div class="step"><span class="step-num">03</span><div><h3>Understand the result</h3><p>See the recorded indicators, limits and next steps — without treating a clean result as a guarantee.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section download-section" id="download">
+      <div class="shell">
+        <div class="download-card reveal">
+          <div class="download-copy">
+            <div class="eyebrow"><i class="eyebrow-dot"></i> Get the project</div>
+            <h2>Bring PAUSE to <span class="gradient-text">your desktop.</span></h2>
+            <p>PAUSE is distributed through its public GitHub repository. Open the repository, choose <strong>Code → Download ZIP</strong>, then read the included setup instructions before running the project.</p>
+            <a class="button button-primary download-cta" data-repo-link href="#download" aria-describedby="repo-status">Download PAUSE <span class="arrow">↗</span></a>
+            <p class="repo-status" id="repo-status" role="status">The GitHub repository link will appear here once configured.</p>
+          </div>
+          <div class="download-steps">
+            <div class="download-step"><span>01</span><div><strong>Open the repository</strong><p>Visit the official PAUSE project on GitHub.</p></div></div>
+            <div class="download-step"><span>02</span><div><strong>Download the ZIP</strong><p>On GitHub, select <b>Code</b>, then <b>Download ZIP</b>.</p></div></div>
+            <div class="download-step"><span>03</span><div><strong>Read the setup guide</strong><p>Extract the ZIP and follow the project's README. Keep API keys and other secrets out of public files.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="approach">
+      <div class="shell">
+        <div class="section-head reveal">
+          <div class="eyebrow"><i class="eyebrow-dot"></i> The PAUSE approach</div>
+          <h2>Designed around <span class="gradient-text">your control.</span></h2>
+          <p>Good security software should be clear about what it knows, what it stores and where its limits begin.</p>
+        </div>
+        <div class="principles">
+          <article class="principle reveal"><span>01 / LOCAL-FIRST</span><h3>Your device, your workspace</h3><p>Core checks and activity records are designed to run locally. Optional connected services are disclosed where they apply.</p></article>
+          <article class="principle reveal"><span>02 / EXPLAINABLE</span><h3>Clarity over false certainty</h3><p>Results are based on configured checks and heuristics. Unknown means unknown — not secretly safe.</p></article>
+          <article class="principle reveal"><span>03 / DELIBERATE</span><h3>Actions stay intentional</h3><p>PAUSE keeps supported actions reviewable and avoids claiming universal interception or invisible protection.</p></article>
+        </div>
+        <div class="caution reveal"><strong>A note on protection:</strong> PAUSE is an evolving development project, not a certified antivirus, firewall or endpoint security product, and it has not been independently security-audited. Keep your operating system protection and browser Safe Browsing enabled. A SAFE result is not a guarantee that a file, link or message is harmless.</div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="shell">
+        <div class="closing-card reveal">
+          <div class="eyebrow"><i class="eyebrow-dot"></i> Make room for better decisions</div>
+          <h2>A little pause can change the way you browse.</h2>
+          <p>Explore the project, understand its current capabilities and follow the build as PAUSE grows.</p>
+          <a class="button button-primary" data-repo-link href="#download">Get PAUSE on GitHub <span class="arrow">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <a class="brand" href="#home"><img src="assets/pause-mark.png" alt=""><span><span class="brand-name">PAUSE</span><span class="brand-sub">DIGITAL SAFETY WORKSPACE</span></span></a>
+      <div class="footer-note">© <span id="year"></span> PAUSE. Built with intention.</div>
+      <div class="footer-links"><a href="#features">Features</a><a href="#approach">Approach</a><a href="#download">Download</a></div>
+    </div>
+  </footer>
+  <script src="site-config.js"></script>
+  <script>
+    (() => {
+      const repositoryUrl = (window.PAUSE_SITE_CONFIG && window.PAUSE_SITE_CONFIG.repositoryUrl || '').trim();
+      const isValidRepository = /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/?$/.test(repositoryUrl);
+      document.querySelectorAll('[data-repo-link]').forEach(link => {
+        if (isValidRepository) {
+          link.href = repositoryUrl.replace(/\/$/, '');
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.classList.remove('is-unconfigured');
+        } else {
+          link.href = '#download';
+          link.classList.add('is-unconfigured');
+          link.textContent = 'GitHub link not set yet';
+        }
+      });
+      const status = document.getElementById('repo-status');
+      if (status && isValidRepository) {
+        status.textContent = 'Opens the official PAUSE repository on GitHub. Choose Code → Download ZIP there.';
+      }
+      const menuButton = document.getElementById('menuToggle');
+      const nav = document.getElementById('navLinks');
+      const year = document.getElementById('year');
+      if (year) year.textContent = new Date().getFullYear();
+      if (menuButton && nav) {
+        menuButton.addEventListener('click', () => {
+          const expanded = menuButton.getAttribute('aria-expanded') === 'true';
+          menuButton.setAttribute('aria-expanded', String(!expanded));
+          nav.classList.toggle('open', !expanded);
+        });
+        nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+          nav.classList.remove('open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }));
+      }
+      const items = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        items.forEach(item => observer.observe(item));
+      } else {
+        items.forEach(item => item.classList.add('visible'));
+      }
+    })();
+  </script>
+</body>
+</html>
